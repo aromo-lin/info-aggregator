@@ -7,6 +7,7 @@ function createWindow(): void {
     height: 800,
     webPreferences: {
       preload: `${__dirname}/../preload/index.js`,
+      sandbox: false,
     },
   })
 
