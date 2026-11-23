@@ -8,7 +8,24 @@
     "build": "electron-vite build",
     "start": "electron-vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "dist": "electron-vite build && electron-builder"
+  },
+  "build": {
+    "appId": "com.lin.infoaggregator",
+    "productName": "信息采集器",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**",
+      "package.json"
+    ],
+    "mac": {
+      "target": ["dmg"],
+      "identity": "-",
+      "hardenedRuntime": false
+    }
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.2",
@@ -20,6 +37,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
     "electron": "^44.1.1",
+    "electron-builder": "^26.18.0",
     "electron-vite": "^6.0.0",
     "jsdom": "^31.0.1",
     "typescript": "^7.0.2",
@@ -30,6 +48,7 @@
     "cheerio": "^1.2.0",
     "playwright": "^1.65.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "xlsx": "^0.18.5"
   }
 }

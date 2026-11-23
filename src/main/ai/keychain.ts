@@ -1,9 +1,10 @@
-import { app, safeStorage } from 'electron'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { safeStorage } from 'electron'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { resolveDataDir } from '../data-dir'
 
 function keyFile(): string {
-  const dir = join(app.getPath('userData'), 'keys')
+  const dir = join(resolveDataDir(), 'keys')
   mkdirSync(dir, { recursive: true })
   return join(dir, 'aikeys.json')
 }
@@ -18,25 +19,28 @@ function readAll(): KeyMap {
   }
 }
 
+function encrypt(v: string): string {
+  return safeStorage.isEncryptionAvailable() ? safeStorage.encryptString(v).toString('base64') : v
+}
+
+function decrypt(v: string): string {
+  if (!safeStorage.isEncryptionAvailable()) return v
+  return safeStorage.decryptString(Buffer.from(v, 'base64'))
+}
+
 export function saveKey(provider: string, key: string): void {
   const all = readAll()
-  all[provider] = safeStorage.isEncryptionAvailable()
-    ? safeStorage.encryptString(key).toString('base64')
-    : key
+  // 复制粘贴常带入首尾空格/换行，先剥掉再加密存储
+  all[provider] = encrypt(key.trim())
   writeFileSync(keyFile(), JSON.stringify(all, null, 2))
 }
 
 export function loadKey(provider: string): string | undefined {
   const v = readAll()[provider]
   if (!v) return undefined
-  if (!safeStorage.isEncryptionAvailable()) return v
   try {
-    return safeStorage.decryptString(Buffer.from(v, 'base64'))
+    return decrypt(v)
   } catch {
     return undefined
   }
-}
-
-export function hasStoredKey(provider: string): boolean {
-  return existsSync(keyFile()) && readAll()[provider] != null
 }

@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import type { Identity, Project, Source } from '../../shared/types'
+import type { Identity, Project, RunRecord, Source } from '../../shared/types'
 
 export interface Collection<T extends { id: string }> {
   getAll(): T[]
@@ -13,6 +13,7 @@ export interface Store {
   projects: Collection<Project>
   sources: Collection<Source>
   identities: Collection<Identity>
+  records: Collection<RunRecord>
   settings: Collection<{ id: string; [key: string]: unknown }>
 }
 
@@ -56,6 +57,7 @@ export function createStore(dir: string): Store {
     projects: makeCollection<Project>(dir, 'projects'),
     sources: makeCollection<Source>(dir, 'sources'),
     identities: makeCollection<Identity>(dir, 'identities'),
+    records: makeCollection<RunRecord>(dir, 'records'),
     settings: makeCollection<{ id: string; [key: string]: unknown }>(dir, 'settings'),
   }
 }

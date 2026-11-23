@@ -14,11 +14,19 @@ const apiMethodChannels: Record<keyof Api, string> = {
   upsertIdentity: 'upsertIdentity',
   removeIdentity: 'removeIdentity',
   runSource: 'runSource',
-  buildReport: 'buildReport',
-  summarize: 'summarize',
+  abortRun: 'abortRun',
+  aiReport: 'aiReport',
+  testAiConnection: 'testAiConnection',
+  exportItems: 'exportItems',
+  listRunRecords: 'listRunRecords',
+  saveRunRecord: 'saveRunRecord',
+  removeRunRecord: 'removeRunRecord',
   saveKey: 'saveKey',
   loadKey: 'loadKey',
-  exportReport: 'exportReport',
+  getSetting: 'getSetting',
+  saveSetting: 'saveSetting',
+  getRateConfig: 'getRateConfig',
+  saveRateConfig: 'saveRateConfig',
 }
 
 describe('api/ipc contract', () => {
